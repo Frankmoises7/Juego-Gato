@@ -29,8 +29,6 @@ currentPlayer = 'X'
 
 // ===================== FUNCIONES ===================== //
 
-
-
 function main() {
   handleStatusDisplay(CURRENT_PLAYER_TURN())
   listeners()
@@ -55,11 +53,10 @@ function handleResetGame () {
 }
 
 
-function handleCellClick(clickedCellEvent) {
+function handleCellClick(clickedCellEvent) { // Checa que la posicion de la casilla y si tiene contenido
   const clickedCell = clickedCellEvent.target
   if (clickedCell.classList.contains('game-cell')) {
     const clickedCellIndex = Array.from(clickedCell.parentNode.children).indexOf(clickedCell)
-    console.log(clickedCellIndex)
     if (GAME_STATE[clickedCellIndex] !=='' || !gameActive) {
       return
     }
@@ -68,7 +65,7 @@ function handleCellClick(clickedCellEvent) {
   }
 }
 
-function resetGame() {
+function resetGame() { // Reinicia el juego 
   let i = GAME_STATE.length
   while(i--) {
     GAME_STATE[i] = ''
@@ -76,22 +73,22 @@ function resetGame() {
 }
 
 function handleCellPlayed(clickedCell, clickedCellIndex) {
-  GAME_STATE[clickedCellIndex] = currentPlayer
-  clickedCell.innerText = currentPlayer
+  GAME_STATE[clickedCellIndex] = currentPlayer // Agrega en la posición correspondiente el valor ya sea "X" u "O" en el estado actual del juego
+  clickedCell.innerText = currentPlayer // Agrega en el HTML el valor del jugador
 }
 
 function handleResultValidation() {
   let roundWon = false
-  for (let i = 0; i < WINNINGS.length; i++) {
-    const winCondition = WINNINGS[i]
+  for (let i = 0; i < WINNINGS.length; i++) { // Itera cada uno de las posibles combinaciones ganadores
+    const winCondition = WINNINGS[i] // Guarda la combinación por ejemplo: [0, 1, 2]
     let position1 = GAME_STATE[winCondition[0]],
     position2 = GAME_STATE[winCondition[1]],
-    position3 = GAME_STATE[winCondition[2]]
+    position3 = GAME_STATE[winCondition[2]] // Almacena el valor del estado actual del juego según las posiciones de winCondition
     if (position1 === '' || position2 === '' || position3 === '') {
-      continue
+      continue // Si hay algún valor vacio nadie ha ganado aún
     }
     if ( position1 === position2 && position2 === position3) {
-      roundWon = true
+      roundWon = true // Si todas las posiciones coinciden entonces, dicho jugador ha ganado la partida
       break
     }
   }
@@ -101,7 +98,7 @@ function handleResultValidation() {
     return
   }
 
-  let roundDraw = !GAME_STATE.includes('')
+  let roundDraw = !GAME_STATE.includes('') // Si todas las celdas tienen valor y la sentencia anterior fue falsa entonces es empate
 
   if(roundDraw) {
     handleStatusDisplay(DRAW_MESSAGE())
@@ -113,7 +110,7 @@ function handleResultValidation() {
 }
 
 function HandlePlayerChange() {
-  currentPlayer = currentPlayer === 'X' ? 'O' : 'X'
+  currentPlayer = currentPlayer === 'X' ? 'O' : 'X' //Cambia el jugador dependiendo de quien realizo el ultimo movimiento
   handleStatusDisplay(CURRENT_PLAYER_TURN())
 }
 
